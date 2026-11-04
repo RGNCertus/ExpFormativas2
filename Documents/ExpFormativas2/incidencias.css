@@ -1,0 +1,122 @@
+/* REGISTRO DE INCIDENCIAS */
+.form-panel {
+  padding: 28px 32px;
+}
+
+.form-row.three {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+}
+
+.field label {
+  margin-bottom: 8px;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.req {
+  color: #c0392b;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0 13px;
+  border: 1.5px solid #b8c8df;
+  border-radius: 9px;
+  outline: none;
+  color: var(--text);
+  background: white;
+  font: inherit;
+  font-size: 14px;
+}
+
+.field input,
+.field select {
+  height: 46px;
+}
+
+.field textarea {
+  min-height: 110px;
+  padding: 12px 13px;
+  resize: vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #9aaac0;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(23, 70, 162, .1);
+}
+
+.field.invalid input,
+.field.invalid select,
+.field.invalid textarea {
+  border-color: #c0392b;
+}
+
+.field .form-message {
+  min-height: 0;
+}
+
+.hint {
+  margin-top: 7px;
+  color: #98a3b3;
+  font-size: 12px;
+}
+
+.form-note {
+  margin: 6px 0 18px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.form-actions .button {
+  padding: 0 24px;
+}
+
+.button-secondary {
+  color: var(--navy);
+  border: 1px solid var(--border);
+  background: white;
+}
+
+.button-secondary:hover {
+  background: var(--light-blue);
+}
+
+@media (max-width: 700px) {
+  .form-panel {
+    padding: 20px 16px;
+  }
+
+  .form-row.three {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-actions .button {
+    width: 100%;
+  }
+}

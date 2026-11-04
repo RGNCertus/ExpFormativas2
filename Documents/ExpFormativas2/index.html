@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso | Gestión de Formatos MINEDU</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body class="login-page">
+  <main class="login-layout">
+    <section class="login-brand">
+      <div class="brand-mark">
+        <img src="img/icono1.png" alt="Logotipo de CERTUS" onerror="this.style.display='none'">
+      </div>
+      <p class="eyebrow">ÁREA DE CONTENIDOS</p>
+      <h1>Sistema de gestión<br>de incidencias</h1>
+      <p class="brand-description">
+        Seguimiento y control de incidencias asociadas a los consultores externos.
+      </p>
+      <div class="brand-decoration decoration-one"></div>
+      <div class="brand-decoration decoration-two"></div>
+      <div class="brand-plus">+</div>
+    </section>
+
+    <section class="login-side">
+      <div class="login-card">
+        <div class="login-logo">
+          <img src="img/icono2.png" alt="Icono del sistema" onerror="this.style.display='none'">
+        </div>
+        <h2>Iniciar sesión</h2>
+        <p class="muted login-intro">Ingresa con tu cuenta institucional de CERTUS.</p>
+
+        <form id="loginForm">
+          <label for="correo">Correo institucional</label>
+          <input
+            type="email"
+            id="correo"
+            name="correo"
+            placeholder="ejemplo@certus.edu.pe"
+            autocomplete="username"
+            required
+          >
+          <small id="loginMessage" class="form-message" aria-live="polite"></small>
+          <button type="submit" class="button button-primary button-full">Iniciar sesión</button>
+        </form>
+
+        <div class="separator"><span>o también</span></div>
+
+        <button type="button" id="googleButton" class="button button-google button-full">
+          <img src="img/icono3.png" alt="" onerror="this.style.display='none'">
+          Continuar con Google
+        </button>
+
+        <div class="login-help">
+          <strong>¿No puedes acceder?</strong>
+          <a href="#" id="supportLink">Contacta a Soporte Técnico</a>
+        </div>
+        <p class="login-note">* Solo personal de CERTUS autorizado.</p>
+      </div>
+      <footer class="page-footer">Gestión de Formatos MINEDU · CERTUS</footer>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

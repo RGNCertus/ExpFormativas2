@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Gestión de Formatos MINEDU</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body class="dashboard-page">
+  <header class="topbar">
+    <a class="topbar-brand" href="dashboard.html" aria-label="Inicio">
+      <img src="img/icono1.png" alt="CERTUS" onerror="this.style.display='none'">
+    </a>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+    <nav class="main-nav" id="mainNav">
+      <a class="nav-link active" href="dashboard.html">Dashboard</a>
+      <a class="nav-link" href="incidencias.html">Registro de incidencias</a>
+      <a class="nav-link" href="reporte-consultor.html">Reporte por consultor</a>
+      <a class="nav-link" href="reporte-consolidado.html">Reporte consolidado</a>
+    </nav>
+
+    <div class="user-area">
+      <button class="user-button" id="userButton">
+        <span class="user-avatar">U</span>
+        <span id="userName">Usuario CERTUS</span>
+        <span class="chevron">▾</span>
+      </button>
+      <div class="user-menu hidden" id="userMenu">
+        <p id="userEmail">usuario@certus.edu.pe</p>
+        <button id="logoutButton" type="button">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <div class="welcome-row">
+      <div>
+        <p class="eyebrow">PANEL DE CONTROL</p>
+        <h1>Resumen general</h1>
+        <p class="muted">Monitoreo de incidencias y seguimiento de consultores externos.</p>
+      </div>
+      <div class="date-label" id="currentDate"></div>
+    </div>
+
+    <section class="stats-grid" aria-label="Indicadores generales">
+      <article class="stat-card">
+        <div class="stat-icon"><img src="img/icono4.png" alt="" onerror="this.style.display='none'"><span class="icon-fallback">!</span></div>
+        <p class="stat-label">Alertas</p>
+        <div class="stat-value">7</div>
+        <p class="stat-detail">Incidencias que requieren atención</p>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon"><img src="img/icono5.png" alt="" onerror="this.style.display='none'"><span class="icon-fallback">↗</span></div>
+        <p class="stat-label">Consultores en seguimiento</p>
+        <div class="stat-value">5</div>
+        <p class="stat-detail">Requieren supervisión cercana</p>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon"><img src="img/icono6.png" alt="" onerror="this.style.display='none'"><span class="icon-fallback">◷</span></div>
+        <p class="stat-label">Retrasos totales</p>
+        <div class="stat-value">14</div>
+        <p class="stat-detail">Entregas fuera del plazo</p>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon"><img src="img/icono7.png" alt="" onerror="this.style.display='none'"><span class="icon-fallback">♙</span></div>
+        <p class="stat-label">Total de consultores</p>
+        <div class="stat-value">34</div>
+        <p class="stat-detail">Consultores registrados</p>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel chart-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Incidencias por mes</h2>
+            <p class="muted">Cantidad de incidencias registradas durante 2026</p>
+          </div>
+          <span class="panel-tag">2026</span>
+        </div>
+        <div class="chart" id="monthlyChart" aria-label="Gráfico de incidencias por mes"></div>
+      </article>
+
+      <article class="panel activity-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Estado de seguimiento</h2>
+            <p class="muted">Resumen general de consultores</p>
+          </div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>En seguimiento</span><strong>5</strong></div>
+          <div class="progress-track"><span class="progress-fill fill-blue" style="width:15%"></span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Sin alertas activas</span><strong>24</strong></div>
+          <div class="progress-track"><span class="progress-fill fill-green" style="width:71%"></span></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Pendientes de revisión</span><strong>5</strong></div>
+          <div class="progress-track"><span class="progress-fill fill-orange" style="width:15%"></span></div>
+        </div>
+        <div class="notice-box">
+          <img src="img/icono8.png" alt="" onerror="this.style.display='none'">
+          <div><strong>Seguimiento preventivo</strong><p>Revisa las alertas para reducir retrasos y reprocesos.</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel critical-panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Top 5 consultores críticos</h2>
+          <p class="muted">Resumen de consultores con mayor número de incidencias</p>
+        </div>
+        <span class="panel-tag">Datos de ejemplo</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Nombre del consultor</th><th>Incidencias</th><th>Estado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Consultor 01</td><td>8</td><td><span class="status status-danger">Crítico</span></td></tr>
+            <tr><td>Consultor 02</td><td>6</td><td><span class="status status-warning">En seguimiento</span></td></tr>
+            <tr><td>Consultor 03</td><td>5</td><td><span class="status status-warning">En seguimiento</span></td></tr>
+            <tr><td>Consultor 04</td><td>4</td><td><span class="status status-info">Observación</span></td></tr>
+            <tr><td>Consultor 05</td><td>3</td><td><span class="status status-info">Observación</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="dashboard-footer">Sistema de gestión de incidencias de contenidos · CERTUS</footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
