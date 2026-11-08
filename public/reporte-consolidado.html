@@ -1,1 +1,162 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reporte consolidado | CERTUS</title><link rel="stylesheet" href="estilos.css"><link rel="stylesheet" href="reportes.css"></head><body class="dashboard-page"><header class="topbar"><a class="topbar-brand" href="dashboard.html"><img src="img/icono1.png" alt="CERTUS"></a><button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button><nav class="main-nav" id="mainNav"><a class="nav-link" href="dashboard.html">Dashboard</a><a class="nav-link" href="incidencias.html">Registro</a><a class="nav-link " href="reporte-consultor.html">Reporte por consultor</a><a class="nav-link active" href="reporte-consolidado.html">Reporte consolidado</a></nav><div class="user-area"><button class="user-button" id="userButton"><span class="user-avatar">U</span><span id="userName">Usuario CERTUS</span><span class="chevron">▾</span></button><div class="user-menu hidden" id="userMenu"><p id="userEmail"></p><button id="logoutButton" type="button">Cerrar sesión</button></div></div></header><main class="dashboard-main"><div class="welcome-row"><div><p class="eyebrow">ÁREA DE CONTENIDOS</p><h1>Reporte consolidado</h1><p class="muted">Consulta los resultados y el seguimiento general de todos los consultores.</p></div><div class="date-label" id="currentDate"></div></div><section class="report-stats"><article class="report-stat"><span>Total de incidencias</span><strong id="total">0</strong></article><article class="report-stat"><span>Pendientes</span><strong id="pendientes">0</strong></article><article class="report-stat"><span>En corrección</span><strong id="correccion">0</strong></article><article class="report-stat"><span>Resueltas</span><strong id="resueltas">0</strong></article></section><section class="panel report-panel"><div class="panel-heading"><div><h2>Filtros de búsqueda</h2><p class="muted">Los resultados se actualizan con las incidencias registradas.</p></div><span class="panel-tag">REPORTES</span></div><div class="report-filters"><div class="field"><label for="buscar">Buscar consultor</label><input id="buscar" type="search" placeholder="Nombre del consultor"></div><div class="field"><label for="desde">Desde</label><input type="date" id="desde"></div><div class="field"><label for="hasta">Hasta</label><input type="date" id="hasta"></div></div><div class="report-actions"><button class="button button-secondary" id="limpiarFiltros" type="button">Limpiar filtros</button><button class="button button-primary" id="exportar" type="button">Exportar CSV</button></div></section><section class="panel report-panel"><div class="panel-heading"><div><h2>Resumen de consultores</h2><p class="muted" id="resultadoInfo">Cargando registros...</p></div></div><div class="table-wrap"><table class="report-table"><thead><tr><th>Consultor</th><th>Total</th><th>Pendientes</th><th>En corrección</th><th>Resueltas</th><th>% resolución</th></tr></thead><tbody id="tablaReporte"></tbody></table></div><p class="report-empty" id="sinDatos" hidden>No hay incidencias para los filtros seleccionados. Registra una incidencia para visualizarla aquí.</p></section><footer class="dashboard-footer">Sistema de gestión de incidencias de contenidos · CERTUS</footer></main><div class="toast" id="toast" role="status" aria-live="polite"></div><script src="reportes.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reporte consolidado | CERTUS</title>
+    <link href="estilos.css" rel="stylesheet">
+    <link href="reportes.css" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+
+    <header class="topbar">
+        <a class="topbar-brand" href="dashboard.html">
+            <img alt="CERTUS" src="img/icono1.png">
+        </a>
+
+        <button aria-label="Abrir menú" class="menu-toggle" id="menuToggle">
+            ☰
+        </button>
+
+        <nav class="main-nav" id="mainNav">
+            <a class="nav-link" href="dashboard.html">Dashboard</a>
+            <a class="nav-link" href="incidencias.html">Registro</a>
+            <a class="nav-link" href="reporte-consultor.html">Reporte por consultor</a>
+            <a class="nav-link active" href="reporte-consolidado.html">Reporte consolidado</a>
+        </nav>
+
+        <div class="user-area">
+            <button class="user-button" id="userButton">
+                <span class="user-avatar">U</span>
+                <span id="userName">Usuario CERTUS</span>
+                <span class="chevron">▾</span>
+            </button>
+
+            <div class="user-menu hidden" id="userMenu">
+                <p id="userEmail"></p>
+                <button id="logoutButton" type="button">Cerrar sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+
+        <div class="welcome-row">
+            <div>
+                <p class="eyebrow">ÁREA DE CONTENIDOS</p>
+                <h1>Reporte consolidado</h1>
+                <p class="muted">
+                    Consulta los resultados y el seguimiento general de todos los consultores.
+                </p>
+            </div>
+
+            <div class="date-label" id="currentDate"></div>
+        </div>
+
+        <section class="report-stats">
+            <article class="report-stat">
+                <span>Total de incidencias</span>
+                <strong id="total">0</strong>
+            </article>
+
+            <article class="report-stat">
+                <span>Pendientes</span>
+                <strong id="pendientes">0</strong>
+            </article>
+
+            <article class="report-stat">
+                <span>En corrección</span>
+                <strong id="correccion">0</strong>
+            </article>
+
+            <article class="report-stat">
+                <span>Resueltas</span>
+                <strong id="resueltas">0</strong>
+            </article>
+        </section>
+
+        <section class="panel report-panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Filtros de búsqueda</h2>
+                    <p class="muted">
+                        Los resultados se actualizan con las incidencias registradas.
+                    </p>
+                </div>
+
+                <span class="panel-tag">REPORTES</span>
+            </div>
+
+            <div class="report-filters">
+                <div class="field">
+                    <label for="buscar">Buscar consultor</label>
+                    <input id="buscar" placeholder="Nombre del consultor" type="search">
+                </div>
+
+                <div class="field">
+                    <label for="desde">Desde</label>
+                    <input id="desde" type="date">
+                </div>
+
+                <div class="field">
+                    <label for="hasta">Hasta</label>
+                    <input id="hasta" type="date">
+                </div>
+            </div>
+
+            <div class="report-actions">
+                <button class="button button-secondary" id="limpiarFiltros" type="button">
+                    Limpiar filtros
+                </button>
+
+                <button class="button button-primary" id="exportar" type="button">
+                    Exportar CSV
+                </button>
+            </div>
+        </section>
+
+        <section class="panel report-panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Resumen de consultores</h2>
+                    <p class="muted" id="resultadoInfo">
+                        Cargando registros...
+                    </p>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Consultor</th>
+                            <th>Total</th>
+                            <th>Pendientes</th>
+                            <th>En corrección</th>
+                            <th>Resueltas</th>
+                            <th>% resolución</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tablaReporte"></tbody>
+                </table>
+            </div>
+
+            <p class="report-empty" hidden id="sinDatos">
+                No hay incidencias para los filtros seleccionados.
+                Registra una incidencia para visualizarla aquí.
+            </p>
+        </section>
+
+        <footer class="dashboard-footer">
+            Sistema de gestión de incidencias de contenidos · CERTUS
+        </footer>
+
+    </main>
+
+    <div aria-live="polite" class="toast" id="toast" role="status"></div>
+
+    <script src="reportes.js"></script>
+
+</body>
+</html>
