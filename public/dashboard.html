@@ -48,25 +48,25 @@
       <article class="stat-card">
         <div class="stat-icon"><img src="img/icono4.png" alt="" onerror="this.style.display='none'"><span class="icon-fallback">!</span></div>
         <p class="stat-label">Alertas</p>
-        <div class="stat-value">7</div>
+        <div class="stat-value" id="statAlertas">0</div>
         <p class="stat-detail">Incidencias que requieren atención</p>
       </article>
       <article class="stat-card">
         <div class="stat-icon"><img src="img/icono5.png" alt="" onerror="this.style.display='none'"><span class="icon-fallback">↗</span></div>
         <p class="stat-label">Consultores en seguimiento</p>
-        <div class="stat-value">5</div>
+        <div class="stat-value" id="statEnSeguimiento">0</div>
         <p class="stat-detail">Requieren supervisión cercana</p>
       </article>
       <article class="stat-card">
         <div class="stat-icon"><img src="img/icono6.png" alt="" onerror="this.style.display='none'"><span class="icon-fallback">◷</span></div>
         <p class="stat-label">Retrasos totales</p>
-        <div class="stat-value">14</div>
+        <div class="stat-value" id="statRetrasos">0</div>
         <p class="stat-detail">Entregas fuera del plazo</p>
       </article>
       <article class="stat-card">
         <div class="stat-icon"><img src="img/icono7.png" alt="" onerror="this.style.display='none'"><span class="icon-fallback">♙</span></div>
         <p class="stat-label">Total de consultores</p>
-        <div class="stat-value">34</div>
+        <div class="stat-value" id="statTotalConsultores">0</div>
         <p class="stat-detail">Consultores registrados</p>
       </article>
     </section>
@@ -91,16 +91,16 @@
           </div>
         </div>
         <div class="progress-item">
-          <div class="progress-label"><span>En seguimiento</span><strong>5</strong></div>
-          <div class="progress-track"><span class="progress-fill fill-blue" style="width:15%"></span></div>
+          <div class="progress-label"><span>En seguimiento</span><strong id="progressEnSeguimientoVal">0</strong></div>
+          <div class="progress-track"><span id="progressEnSeguimientoBar" class="progress-fill fill-blue" style="width:0%"></span></div>
         </div>
         <div class="progress-item">
-          <div class="progress-label"><span>Sin alertas activas</span><strong>24</strong></div>
-          <div class="progress-track"><span class="progress-fill fill-green" style="width:71%"></span></div>
+          <div class="progress-label"><span>Sin alertas activas</span><strong id="progressSinAlertasVal">0</strong></div>
+          <div class="progress-track"><span id="progressSinAlertasBar" class="progress-fill fill-green" style="width:0%"></span></div>
         </div>
         <div class="progress-item">
-          <div class="progress-label"><span>Pendientes de revisión</span><strong>5</strong></div>
-          <div class="progress-track"><span class="progress-fill fill-orange" style="width:15%"></span></div>
+          <div class="progress-label"><span>Pendientes de revisión</span><strong id="progressPendientesVal">0</strong></div>
+          <div class="progress-track"><span id="progressPendientesBar" class="progress-fill fill-orange" style="width:0%"></span></div>
         </div>
         <div class="notice-box">
           <img src="img/icono8.png" alt="" onerror="this.style.display='none'">
@@ -122,12 +122,9 @@
           <thead>
             <tr><th>Nombre del consultor</th><th>Incidencias</th><th>Estado</th></tr>
           </thead>
-          <tbody>
-            <tr><td>Consultor 01</td><td>8</td><td><span class="status status-danger">Crítico</span></td></tr>
-            <tr><td>Consultor 02</td><td>6</td><td><span class="status status-warning">En seguimiento</span></td></tr>
-            <tr><td>Consultor 03</td><td>5</td><td><span class="status status-warning">En seguimiento</span></td></tr>
-            <tr><td>Consultor 04</td><td>4</td><td><span class="status status-info">Observación</span></td></tr>
-            <tr><td>Consultor 05</td><td>3</td><td><span class="status status-info">Observación</span></td></tr>
+          <tbody id="topConsultoresTable">
+
+            <tr><td colspan="3" style="text-align: center;" class="muted">No hay registros aún</td></tr>
           </tbody>
         </table>
       </div>
