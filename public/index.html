@@ -6,7 +6,9 @@
   <title>Acceso | Gestión de Formatos MINEDU</title>
   <link rel="stylesheet" href="estilos.css">
 </head>
+
 <body class="login-page">
+
   <main class="login-layout">
     <section class="login-brand">
       <div class="brand-mark">
@@ -28,10 +30,43 @@
           <img src="img/icono2.png" alt="Icono del sistema" onerror="this.style.display='none'">
         </div>
         <h2>Iniciar sesión</h2>
-        <p class="muted login-intro">Ingresa con tu cuenta institucional de CERTUS.</p>
-
+        <p class="muted login-intro">
+          Ingresa con tu cuenta institucional de CERTUS.
+        </p>
         <small id="loginMessage" class="form-message" aria-live="polite"></small>
+        <form id="emailLoginForm">
 
+          <div class="form-group">
+            <label for="emailInput">Correo institucional</label>
+            <input
+              type="email"
+              id="emailInput"
+              placeholder="usuario@certus.edu.pe"
+              autocomplete="username"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="passwordInput">Contraseña</label>
+            <input
+              type="password"
+              id="passwordInput"
+              placeholder="Ingresa tu contraseña"
+              autocomplete="current-password"
+              required
+            >
+          </div>
+
+          <button type="submit" id="emailLoginButton" class="button button-primary button-full">
+            Iniciar sesión
+          </button>
+
+        </form>
+
+        <div class="separator">
+          <span>O TAMBIÉN</span>
+        </div>
         <button type="button" id="googleButton" class="button button-google button-full">
           <img src="img/icono3.png" alt="" onerror="this.style.display='none'">
           Continuar con Google
@@ -41,9 +76,13 @@
           <strong>¿No puedes acceder?</strong>
           <a href="#" id="supportLink">Contacta a Soporte Técnico</a>
         </div>
-        <p class="login-note">* Solo personal de CERTUS autorizado.</p>
+        <p class="login-note">
+          * Solo personal de CERTUS autorizado.
+        </p>
       </div>
-      <footer class="page-footer">Gestión de Formatos MINEDU · CERTUS</footer>
+      <footer class="page-footer">
+        Gestión de Formatos MINEDU · CERTUS
+      </footer>
     </section>
   </main>
   <script type="module" src="script.js"></script>

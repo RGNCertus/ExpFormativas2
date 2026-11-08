@@ -4,6 +4,7 @@ import {
     getAuth,
     GoogleAuthProvider,
     signInWithPopup,
+    signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
@@ -17,13 +18,51 @@ const firebaseConfig = {
     appId: "1:595922279650:web:674a9721e5ca211bd092bb"
 };
 
+document.addEventListener("DOMContentLoaded", function () {
+    const emailLoginForm = document.getElementById("emailLoginForm");
+    const loginMessage = document.getElementById("loginMessage");
+    const emailLoginButton = document.getElementById("emailLoginButton");
+    emailLoginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const correo = document.getElementById("emailInput").value.trim().toLowerCase();
+        const contraseña = document.getElementById("passwordInput").value;
+
+        if (!correo.endsWith("@certus.edu.pe")) {
+            loginMessage.textContent = "Utiliza un correo institucional de CERTUS.";
+            return;
+        }
+        loginMessage.textContent = "Verificando datos...";
+        emailLoginButton.disabled = true;
+
+        signInWithEmailAndPassword(auth, correo, contraseña)
+            .then(function (result) {
+                const usuario = result.user;
+                if (!usuario.email.toLowerCase().endsWith("@certus.edu.pe")) {
+                    return signOut(auth).then(function () {
+                        throw new Error("Correo institucional no válido.");
+                    });
+                }
+
+                window.location.href = "dashboard.html";
+            })
+            .catch(function (error) {
+                console.error("Error de inicio de sesión:", error);
+                loginMessage.textContent = "Correo o contraseña incorrectos.";
+            })
+            .finally(function () {
+                emailLoginButton.disabled = false;
+            });
+    });
+});
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
 
 provider.setCustomParameters({
-    hd: "certus.edu.pe"
+    hd: "certus.edu.pe",
+    prompt: "select_account"
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -97,10 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const correo = usuario.email || "";
 
-            if (
-                !correo.toLowerCase().endsWith("@certus.edu.pe") ||
-                !usuario.emailVerified
-            ) {
+            if (!correo.toLowerCase().endsWith("@certus.edu.pe")) {
                 signOut(auth).then(function () {
                     window.location.href = "index.html";
                 });
