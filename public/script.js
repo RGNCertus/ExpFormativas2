@@ -158,8 +158,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.getElementById("userEmail").textContent = correo;
 
-            document.getElementById("userName").textContent =
-                usuario.displayName || correo.split("@")[0];
+            const nombre = usuario.displayName || correo.split("@")[0];
+
+            document.getElementById("userName").textContent = nombre;
+
+            document.querySelector(".user-avatar").textContent =
+                nombre.charAt(0).toUpperCase();
 
             const fecha = new Date();
 
