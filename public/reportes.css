@@ -110,3 +110,17 @@
     flex: 1;
   }
 }
+.btn-eliminar {
+    border: 0;
+    background: #fdecec;
+    color: #c0392b;
+    border-radius: 8px;
+    padding: 6px 9px;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+}
+
+.btn-eliminar:hover {
+    background: #f8caca;
+}
