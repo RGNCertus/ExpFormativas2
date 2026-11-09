@@ -3,9 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const individual = location.pathname.endsWith("reporte-consultor.html");
 
     const correo = sessionStorage.getItem("correoCertus") || "usuario@certus.edu.pe";
+    const nombre = sessionStorage.getItem("nombreCertus") || correo.split("@")[0];
 
     $("userEmail").textContent = correo;
-    $("userName").textContent = correo.split("@")[0];
+    $("userName").textContent = nombre;
+
+    document.querySelector(".user-avatar").textContent =
+        nombre.charAt(0).toUpperCase();
 
     $("currentDate").textContent = new Date().toLocaleDateString("es-PE", {
         weekday: "long",

@@ -5,8 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ----- Barra superior (usuario, menú y fecha) -----
   const correo = sessionStorage.getItem("correoCertus") || "usuario@certus.edu.pe";
+  const nombre = sessionStorage.getItem("nombreCertus") || correo.split("@")[0];
+
   document.getElementById("userEmail").textContent = correo;
-  document.getElementById("userName").textContent = correo.split("@")[0];
+  document.getElementById("userName").textContent = nombre;
+
+  document.querySelector(".user-avatar").textContent =
+      nombre.charAt(0).toUpperCase();
   document.getElementById("currentDate").textContent =
     new Date().toLocaleDateString("es-PE", {
       weekday: "long", day: "numeric", month: "long", year: "numeric"

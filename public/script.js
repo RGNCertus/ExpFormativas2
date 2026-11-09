@@ -37,11 +37,20 @@ document.addEventListener("DOMContentLoaded", function () {
         signInWithEmailAndPassword(auth, correo, contraseña)
             .then(function (result) {
                 const usuario = result.user;
-                if (!usuario.email.toLowerCase().endsWith("@certus.edu.pe")) {
+                const correo = usuario.email.toLowerCase();
+
+                if (!correo.endsWith("@certus.edu.pe")) {
                     return signOut(auth).then(function () {
                         throw new Error("Correo institucional no válido.");
                     });
                 }
+
+                sessionStorage.setItem("correoCertus", correo);
+
+                sessionStorage.setItem(
+                    "nombreCertus",
+                    usuario.displayName || correo.split("@")[0]
+                );
 
                 window.location.href = "dashboard.html";
             })
@@ -97,7 +106,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     sessionStorage.setItem("correoCertus", correo);
-                    sessionStorage.setItem("nombreCertus", usuario.displayName);
+
+                    sessionStorage.setItem(
+                        "nombreCertus",
+                        usuario.displayName || correo.split("@")[0]
+                    );
 
                     window.location.href = "../dashboard.html";
 
