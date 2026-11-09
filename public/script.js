@@ -160,43 +160,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-        const datos = [
-            { mes: "Ene", valor: 21 },
-            { mes: "Feb", valor: 18 },
-            { mes: "Mar", valor: 30 },
-            { mes: "Abr", valor: 25 },
-            { mes: "May", valor: 20 },
-            { mes: "Jun", valor: 19 },
-            { mes: "Jul", valor: 22 },
-            { mes: "Ago", valor: 16 },
-            { mes: "Sep", valor: 16 },
-            { mes: "Oct", valor: 17 }
-        ];
-
-        datos.forEach(function (dato) {
-
-            const columna = document.createElement("div");
-            columna.className = "chart-column";
-
-            const valor = document.createElement("span");
-            valor.className = "chart-value";
-            valor.textContent = dato.valor;
-
-            const barra = document.createElement("div");
-            barra.className = "chart-bar";
-            barra.style.height = (dato.valor / 30 * 78) + "%";
-            barra.title = dato.valor + " incidencias";
-
-            const mes = document.createElement("span");
-            mes.className = "chart-month";
-            mes.textContent = dato.mes;
-
-            columna.appendChild(valor);
-            columna.appendChild(barra);
-            columna.appendChild(mes);
-
-            chart.appendChild(columna);
-
+        pintarDashboard();
+        window.addEventListener("storage", function (e) {
+        if (e.key === "incidencias") pintarDashboard();
         });
 
         const logoutButton = document.getElementById("logoutButton");
@@ -255,4 +221,129 @@ function mostrarAviso(mensaje) {
         toast.classList.remove("show");
     }, 2800);
 
+}
+function leerIncidencias() {
+    try {
+        const a = JSON.parse(localStorage.getItem("incidencias") || "[]");
+        return Array.isArray(a) ? a : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function pintarDashboard() {
+    const incidencias = leerIncidencias();
+
+    // Mismos consultores base que usan los reportes
+    const base = ["Consultor 01", "Consultor 02", "Consultor 03", "Consultor 04", "Consultor 05"];
+    const nombres = [...new Set(base.concat(incidencias.map(function (x) { return x.consultor; })).filter(Boolean))];
+
+    // Agrupar por consultor
+    const porConsultor = {};
+    nombres.forEach(function (n) { porConsultor[n] = []; });
+    incidencias.forEach(function (x) { if (x.consultor) porConsultor[x.consultor].push(x); });
+
+    const sinResolver = function (x) { return x.estado !== "Resuelto"; };
+
+    // ----- Tarjetas -----
+    const alertas = incidencias.filter(sinResolver).length;
+    const retrasos = incidencias.filter(function (x) { return x.tipo === "Entrega fuera de plazo"; }).length;
+    const enSeguimiento = nombres.filter(function (n) { return porConsultor[n].some(sinResolver); }).length;
+    const conPendientes = nombres.filter(function (n) {
+        return porConsultor[n].some(function (x) { return x.estado === "Pendiente"; });
+    }).length;
+    const total = nombres.length;
+
+    document.getElementById("statAlertas").textContent = alertas;
+    document.getElementById("statEnSeguimiento").textContent = enSeguimiento;
+    document.getElementById("statRetrasos").textContent = retrasos;
+    document.getElementById("statTotalConsultores").textContent = total;
+
+    // ----- Estado de seguimiento -----
+    const pct = function (v) { return total ? Math.round(v / total * 100) : 0; };
+    const sinAlertas = total - enSeguimiento;
+    document.getElementById("progressEnSeguimientoVal").textContent = enSeguimiento;
+    document.getElementById("progressSinAlertasVal").textContent = sinAlertas;
+    document.getElementById("progressPendientesVal").textContent = conPendientes;
+    document.getElementById("progressEnSeguimientoBar").style.width = pct(enSeguimiento) + "%";
+    document.getElementById("progressSinAlertasBar").style.width = pct(sinAlertas) + "%";
+    document.getElementById("progressPendientesBar").style.width = pct(conPendientes) + "%";
+
+    // ----- Gráfico por mes (2026) -----
+    const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const conteo = new Array(12).fill(0);
+    incidencias.forEach(function (x) {
+        const partes = String(x.fecha || "").split("-"); // "AAAA-MM-DD"
+        if (partes[0] === "2026") conteo[parseInt(partes[1], 10) - 1]++;
+    });
+    const maximo = Math.max.apply(null, conteo.concat(1));
+    const chart = document.getElementById("monthlyChart");
+    chart.replaceChildren();
+    conteo.forEach(function (valor, i) {
+        const columna = document.createElement("div");
+        columna.className = "chart-column";
+
+        const etiqueta = document.createElement("span");
+        etiqueta.className = "chart-value";
+        etiqueta.textContent = valor;
+
+        const barra = document.createElement("div");
+        barra.className = "chart-bar";
+        barra.style.height = (valor / maximo * 78) + "%";
+        barra.title = valor + " incidencias";
+
+        const mes = document.createElement("span");
+        mes.className = "chart-month";
+        mes.textContent = meses[i];
+
+        columna.append(etiqueta, barra, mes);
+        chart.appendChild(columna);
+    });
+
+    // ----- Top 5 consultores críticos -----
+    const tbody = document.getElementById("topConsultoresTable");
+    tbody.replaceChildren();
+    const top = nombres
+        .map(function (n) {
+            const items = porConsultor[n];
+            return {
+                nombre: n,
+                total: items.length,
+                pendientes: items.filter(function (x) { return x.estado === "Pendiente"; }).length,
+                correccion: items.filter(function (x) { return x.estado === "En corrección"; }).length
+            };
+        })
+        .filter(function (c) { return c.total > 0; })
+        .sort(function (a, b) { return b.total - a.total || a.nombre.localeCompare(b.nombre); })
+        .slice(0, 5);
+
+    if (top.length === 0) {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 3;
+        td.style.textAlign = "center";
+        td.className = "muted";
+        td.textContent = "No hay registros aún";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+    }
+
+    top.forEach(function (c) {
+        const tr = document.createElement("tr");
+        const tdN = document.createElement("td"); tdN.textContent = c.nombre;
+        const tdI = document.createElement("td"); tdI.textContent = c.total;
+        const tdE = document.createElement("td");
+        const badge = document.createElement("span");
+        if (c.pendientes > 0) {
+            badge.className = "status status-danger"; badge.textContent = "Crítico";
+        } else if (c.correccion > 0) {
+            badge.className = "status status-warning"; badge.textContent = "En seguimiento";
+        } else {
+            badge.className = "status status-info"; badge.textContent = "Al día";
+        }
+        tdE.appendChild(badge);
+        tr.append(tdN, tdI, tdE);
+        tbody.appendChild(tr);
+    });
 }
