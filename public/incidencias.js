@@ -37,6 +37,43 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // ----- Lista compartida de consultores -----
+  function cargarConsultores() {
+    const selector = document.getElementById("consultor");
+    let consultores = [];
+    try {
+      const guardados = JSON.parse(localStorage.getItem("consultores") || "[]");
+      if (Array.isArray(guardados)) consultores = guardados;
+    } catch (e) {}
+
+    const base = ["Consultor 01", "Consultor 02", "Consultor 03", "Consultor 04", "Consultor 05"];
+    const nombres = [...new Set(base.concat(
+      consultores.map(c => c.nombre),
+      leerIncidencias().map(x => x.consultor)
+    ).filter(Boolean))];
+
+    selector.replaceChildren();
+    const inicial = document.createElement("option");
+    inicial.value = "";
+    inicial.textContent = "Seleccionar consultor";
+    selector.append(inicial);
+
+    nombres.sort((a, b) => a.localeCompare(b, "es")).forEach(nombre => {
+      const registro = consultores.find(c => c.nombre === nombre);
+      const estado = registro?.estado || "Activo";
+      const opcion = document.createElement("option");
+      opcion.value = nombre;
+      opcion.textContent = nombre + (estado === "Activo" ? "" : " · " + estado);
+      opcion.disabled = estado === "Inactivo";
+      selector.append(opcion);
+    });
+  }
+
+  cargarConsultores();
+  window.addEventListener("storage", event => {
+    if (event.key === "consultores") cargarConsultores();
+  });
+
   // ----- Formulario -----
   function fijarFechaHoy() {
     const hoy = new Date();
