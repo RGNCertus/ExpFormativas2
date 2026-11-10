@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 window.location.href = "index.html";
             });
 
-        });
+        });n
 
         const userButton = document.getElementById("userButton");
         const userMenu = document.getElementById("userMenu");
@@ -278,7 +278,10 @@ function pintarDashboard() {
 
     // ----- Estado de seguimiento -----
     const pct = function (v) { return total ? Math.round(v / total * 100) : 0; };
-    const sinAlertas = total - enSeguimiento;
+    
+    const sinAlertas = nombres.filter(function (n) {
+    return porConsultor[n].length > 0 && !porConsultor[n].some(sinResolver);
+}).length;
     document.getElementById("progressEnSeguimientoVal").textContent = enSeguimiento;
     document.getElementById("progressSinAlertasVal").textContent = sinAlertas;
     document.getElementById("progressPendientesVal").textContent = conPendientes;
