@@ -124,3 +124,59 @@
 .btn-eliminar:hover {
     background: #f8caca;
 }
+
+/* --- Gestión de consultores --- */
+.consultants-panel {
+  margin-bottom: 22px;
+}
+.consultant-toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(280px, 1.3fr);
+  gap: 16px;
+  margin: 4px 0 18px;
+}
+.add-consultant {
+  display: flex;
+  gap: 8px;
+}
+.add-consultant input {
+  flex: 1;
+  min-width: 0;
+}
+.add-consultant .button {
+  min-height: 42px;
+  padding: 0 16px;
+  white-space: nowrap;
+}
+.consultant-table {
+  min-width: 720px;
+}
+.consultant-table .consultant-name {
+  color: #17386f;
+  font-weight: 700;
+}
+.consultant-status-select {
+  min-width: 125px;
+  min-height: 36px;
+  padding: 6px 28px 6px 9px;
+  border: 1px solid #cbd7e7;
+  border-radius: 7px;
+  color: #243b5b;
+  background: #fff;
+}
+.consultant-note {
+  margin: 14px 0 0;
+  color: #7a8799;
+  font-size: 11px;
+}
+@media (max-width: 700px) {
+  .consultant-toolbar {
+    grid-template-columns: 1fr;
+  }
+  .add-consultant {
+    flex-wrap: wrap;
+  }
+  .add-consultant .button {
+    flex: 0 0 auto;
+  }
+}
