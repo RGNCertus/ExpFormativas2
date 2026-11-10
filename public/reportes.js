@@ -41,6 +41,143 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     let datos = obtener();
+
+    const CLAVE_CONSULTORES = "consultores";
+    const CONSULTORES_BASE = [
+        "Consultor 01", "Consultor 02", "Consultor 03",
+        "Consultor 04", "Consultor 05"
+    ];
+
+    function obtenerConsultores() {
+        let guardados = [];
+        try {
+            const valor = JSON.parse(localStorage.getItem(CLAVE_CONSULTORES) || "[]");
+            if (Array.isArray(valor)) guardados = valor;
+        } catch (_) {}
+
+        const mapa = new Map();
+        [...CONSULTORES_BASE, ...guardados.map(c => c.nombre), ...datos.map(x => x.consultor)]
+            .filter(Boolean)
+            .forEach(nombre => {
+                const previo = guardados.find(c => c.nombre === nombre);
+                mapa.set(nombre, {
+                    nombre,
+                    estado: previo && ["Activo", "Inactivo", "Ocupado"].includes(previo.estado)
+                        ? previo.estado : "Activo"
+                });
+            });
+        return [...mapa.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+    }
+
+    let consultores = obtenerConsultores();
+
+    function guardarConsultores() {
+        localStorage.setItem(CLAVE_CONSULTORES, JSON.stringify(consultores));
+    }
+
+    function pintarConsultores() {
+        const body = $("tablaConsultores");
+        if (!body) return;
+        const busqueda = texto($("buscarConsultor")?.value).trim().toLocaleLowerCase();
+        const lista = consultores.filter(c => c.nombre.toLocaleLowerCase().includes(busqueda));
+        body.replaceChildren();
+
+        lista.forEach(c => {
+            const incidenciasConsultor = datos.filter(x => x.consultor === c.nombre);
+            const pendientesConsultor = incidenciasConsultor.filter(x => x.estado === "Pendiente").length;
+            const ultima = incidenciasConsultor
+                .map(x => x.fecha)
+                .filter(Boolean)
+                .sort()
+                .pop();
+
+            const tr = document.createElement("tr");
+            const nombreTd = celda(tr, c.nombre);
+            nombreTd.classList.add("consultant-name");
+            celda(tr, c.estado);
+            const estadoTd = tr.children[1];
+            const badge = document.createElement("span");
+            badge.className = "status " + (
+                c.estado === "Activo" ? "status-info" :
+                c.estado === "Ocupado" ? "status-warning" : "status-danger"
+            );
+            badge.textContent = c.estado;
+            estadoTd.replaceChildren(badge);
+
+            celda(tr, incidenciasConsultor.length);
+            celda(tr, pendientesConsultor);
+            celda(tr, ultima ? fecha(ultima) : "—");
+
+            const acciones = document.createElement("td");
+            const select = document.createElement("select");
+            select.className = "consultant-status-select";
+            select.setAttribute("aria-label", "Cambiar estado de " + c.nombre);
+            ["Activo", "Inactivo", "Ocupado"].forEach(estado => {
+                const option = document.createElement("option");
+                option.value = estado;
+                option.textContent = estado;
+                option.selected = estado === c.estado;
+                select.append(option);
+            });
+            select.addEventListener("change", () => {
+                c.estado = select.value;
+                guardarConsultores();
+                pintarConsultores();
+                mostrarAviso("Estado de " + c.nombre + " actualizado.");
+            });
+            acciones.append(select);
+            tr.append(acciones);
+            body.append(tr);
+        });
+
+        $("sinConsultores").hidden = lista.length > 0;
+        $("sinConsultores").textContent = busqueda
+            ? "No se encontraron consultores con ese nombre."
+            : "No hay consultores registrados.";
+    }
+
+    function mostrarAviso(mensaje) {
+        const toast = $("toast");
+        if (!toast) return;
+        toast.textContent = mensaje;
+        toast.classList.add("show");
+        window.setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
+    $("buscarConsultor")?.addEventListener("input", pintarConsultores);
+    $("agregarConsultor")?.addEventListener("click", () => {
+        const campo = $("nuevoConsultor");
+        const nombreNuevo = campo.value.trim().replace(/\\s+/g, " ");
+        if (!nombreNuevo) {
+            mostrarAviso("Escribe el nombre del consultor.");
+            campo.focus();
+            return;
+        }
+        if (consultores.some(c => c.nombre.toLocaleLowerCase() === nombreNuevo.toLocaleLowerCase())) {
+            mostrarAviso("Ese consultor ya está registrado.");
+            campo.focus();
+            return;
+        }
+        consultores.push({ nombre: nombreNuevo, estado: "Activo" });
+        consultores.sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+        guardarConsultores();
+        const filtro = $("consultorFiltro");
+        if (filtro && ![...filtro.options].some(o => o.value === nombreNuevo)) {
+            const opcion = document.createElement("option");
+            opcion.value = nombreNuevo;
+            opcion.textContent = nombreNuevo;
+            filtro.append(opcion);
+        }
+        campo.value = "";
+        pintarConsultores();
+        mostrarAviso("Consultor agregado correctamente.");
+    });
+    $("nuevoConsultor")?.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            $("agregarConsultor").click();
+        }
+    });
     function eliminar(ids, mensaje){
   if(!confirm(mensaje))return;
   const quitar=new Set(ids);
@@ -51,29 +188,17 @@ document.addEventListener("DOMContentLoaded", () => {
 function botonEliminar(ids,mensaje){
   const td=document.createElement("td");
   const b=document.createElement("button");
-  b.type="button";b.className="btn-eliminar";
-b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+  b.type="button";b.className="btn-eliminar";b.textContent="🗑️";
   b.title="Eliminar";b.setAttribute("aria-label","Eliminar");
   b.addEventListener("click",()=>eliminar(ids,mensaje));
   td.append(b);return td;
 } 
 
     if (individual) {
-        const nombres = [
-            ...new Set([
-                "Consultor 01",
-                "Consultor 02",
-                "Consultor 03",
-                "Consultor 04",
-                "Consultor 05",
-                ...datos.map(x => x.consultor)
-            ].filter(Boolean))
-        ].sort();
-
-        nombres.forEach(n => {
+        consultores.forEach(c => {
             const o = document.createElement("option");
-            o.value = n;
-            o.textContent = n;
+            o.value = c.nombre;
+            o.textContent = c.nombre;
             $("consultorFiltro").append(o);
         });
     }
@@ -234,6 +359,8 @@ b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke=
         $("resultadoInfo").textContent = individual
             ? `${filas.length} incidencia(s) encontrada(s)`
             : `${exportRows.length - 1} consultor(es) con incidencias · ${filas.length} registro(s)`;
+
+        if (individual) pintarConsultores();
     }
 
     filtros.forEach(id => {
@@ -273,7 +400,7 @@ b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke=
     });
 
     window.addEventListener("storage", event => {
-        if (event.key === "incidencias") {
+        if (event.key === "incidencias" || event.key === CLAVE_CONSULTORES) {
             location.reload();
         }
     });
