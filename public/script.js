@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 window.location.href = "index.html";
             });
 
-        });n
+        });
 
         const userButton = document.getElementById("userButton");
         const userMenu = document.getElementById("userMenu");
