@@ -84,6 +84,48 @@
 
         </section>
 
+        <section class="panel report-panel consultants-panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Lista de consultores</h2>
+                    <p class="muted">Administra el estado y consulta la actividad de todos los consultores registrados.</p>
+                </div>
+                <span class="panel-tag">GESTIÓN DE CONSULTORES</span>
+            </div>
+
+            <div class="consultant-toolbar">
+                <div class="field">
+                    <label for="buscarConsultor">Buscar consultor</label>
+                    <input id="buscarConsultor" type="search" placeholder="Nombre del consultor">
+                </div>
+                <div class="field">
+                    <label for="nuevoConsultor">Agregar consultor</label>
+                    <div class="add-consultant">
+                        <input id="nuevoConsultor" type="text" maxlength="80" placeholder="Nombre del consultor">
+                        <button class="button button-primary" id="agregarConsultor" type="button">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table class="report-table consultant-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                            <th>Incidencias</th>
+                            <th>Pendientes</th>
+                            <th>Última incidencia</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaConsultores"></tbody>
+                </table>
+            </div>
+            <p class="report-empty" hidden id="sinConsultores">No hay consultores registrados.</p>
+            <p class="consultant-note">Los cambios de estado se guardan en este navegador y se reflejan en el registro y los reportes.</p>
+        </section>
+
         <section class="panel report-panel">
 
             <div class="panel-heading">
@@ -191,3 +233,4 @@
 
 </body>
 </html>
+
